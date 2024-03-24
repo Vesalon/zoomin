@@ -126,7 +126,7 @@ class Rings {
 
     update() {
         var curr_angles = this.rings[0].map(shift => shift.angle);
-        var next_angles = make_next_angles2(curr_angles, 25);
+        var next_angles = make_next_angles2(curr_angles, 35, 15);
         var ring = [];
         for (var j = 0; j < curr_angles.length; j++) {
             var shift = new Shift(next_angles[j], curr_angles[j]);
@@ -158,18 +158,26 @@ function gen_init_angles(num_angles) {
     return thetas;
 }
 
-function make_next_angles(curr_angles, momentum_period=15) {
-    if (loop_counter%momentum_period == 0){
-        shift_angle = 0.7*(Math.random() - 0.5);
+function make_next_angles(curr_angles, momentum_period=15, impulse_period=7) {
+    var cycle_ind = loop_counter%momentum_period;
+    if (cycle_ind == 0){
+        final_shift_angle = 0.7*(Math.random() - 0.5);
+    }
+    if (cycle_ind <= impulse_period){
+        shift_angle = cycle_ind * final_shift_angle/impulse_period;
     }
     var next_angles = curr_angles.map(num => (num - shift_angle) % (2*Math.PI));
     return next_angles;
 }
 
-function make_next_angles2(curr_angles, momentum_period=15) {
-    if (loop_counter%momentum_period == 0){
+function make_next_angles2(curr_angles, momentum_period=15, impulse_period=7) {
+    var cycle_ind = loop_counter%momentum_period;
+    if (cycle_ind == 0){
         root_shift_angle = 0.7*(Math.random() - 0.5);
-        shift_angles = curr_angles.map(_ => root_shift_angle + 0.003*(Math.random() - 0.5))
+        final_shift_angles = curr_angles.map(_ => root_shift_angle + 0.003*(Math.random() - 0.5))
+    }
+    if (cycle_ind <= impulse_period){
+        shift_angles = final_shift_angles.map(n => n * cycle_ind/impulse_period);
     }
     var next_angles = curr_angles.map((num, i) => (num - shift_angles[i]) % (2*Math.PI));
     return next_angles;
