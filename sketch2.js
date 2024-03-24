@@ -1,11 +1,11 @@
 function launch() {
     canvas = document.getElementById('canvas');
-    w = canvas.width;
-    h = canvas.height;
-    // canvas.width = w = window.innerWidth;
-    // canvas.height = h = window.innerHeight;
-    // canvas.style.width = w + 'px';
-    // canvas.style.height = h + 'px';
+    // w = canvas.width;
+    // h = canvas.height;
+    canvas.width = w = window.innerWidth;
+    canvas.height = h = window.innerHeight;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
 
     gl = canvas.getContext('webgl', { antialias: true, alpha: false });
     if (!gl) {
@@ -81,9 +81,6 @@ function launch() {
 
     draw();
 }
-
-
-
 
 class Point {
     constructor(x, y) {
@@ -219,8 +216,8 @@ function resizeCanvasToDisplaySize(canvas) {
 
 function draw(currentTime) {
     if (currentTime - lastDrawTime > interval) {
-        resizeCanvasToDisplaySize(gl.canvas);
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+        // resizeCanvasToDisplaySize(gl.canvas);
+        // gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         vertices = rings.draw();
         vertices = vertices.map(line => [
