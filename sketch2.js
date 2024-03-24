@@ -126,7 +126,7 @@ class Rings {
 
     update() {
         var curr_angles = this.rings[0].map(shift => shift.angle);
-        var next_angles = make_next_angles(curr_angles, 25);
+        var next_angles = make_next_angles2(curr_angles, 25);
         var ring = [];
         for (var j = 0; j < curr_angles.length; j++) {
             var shift = new Shift(next_angles[j], curr_angles[j]);
@@ -169,7 +169,7 @@ function make_next_angles(curr_angles, momentum_period=15) {
 function make_next_angles2(curr_angles, momentum_period=15) {
     if (loop_counter%momentum_period == 0){
         root_shift_angle = 0.7*(Math.random() - 0.5);
-        shift_angles = curr_angles.map(_ => root_shift_angle + 0.01*(Math.random() - 0.5))
+        shift_angles = curr_angles.map(_ => root_shift_angle + 0.003*(Math.random() - 0.5))
     }
     var next_angles = curr_angles.map((num, i) => (num - shift_angles[i]) % (2*Math.PI));
     return next_angles;
