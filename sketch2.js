@@ -160,7 +160,7 @@ function gen_init_angles(num_angles) {
 
 function make_next_angles(curr_angles, momentum_period=15) {
     if (loop_counter%momentum_period == 0){
-        shift_angle = Math.random() - 0.5;
+        shift_angle = 0.7*(Math.random() - 0.5);
     }
     var next_angles = curr_angles.map(num => (num - shift_angle) % (2*Math.PI));
     return next_angles;
@@ -168,7 +168,8 @@ function make_next_angles(curr_angles, momentum_period=15) {
 
 function make_next_angles2(curr_angles, momentum_period=15) {
     if (loop_counter%momentum_period == 0){
-        shift_angles = curr_angles.map(_ => Math.random() - 0.5)
+        root_shift_angle = 0.7*(Math.random() - 0.5);
+        shift_angles = curr_angles.map(_ => root_shift_angle + 0.01*(Math.random() - 0.5))
     }
     var next_angles = curr_angles.map((num, i) => (num - shift_angles[i]) % (2*Math.PI));
     return next_angles;
