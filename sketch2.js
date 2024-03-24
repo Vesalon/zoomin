@@ -74,7 +74,6 @@ function launch() {
     }
     rings = new Rings(shift_rings, radii, center);
 
-
     draw();
 }
 
@@ -126,7 +125,7 @@ class Rings {
 
     update() {
         var curr_angles = this.rings[0].map(shift => shift.angle);
-        var next_angles = make_next_angles2(curr_angles, 35, 15);
+        var next_angles = make_next_angles(curr_angles, 50, 26);
         var ring = [];
         for (var j = 0; j < curr_angles.length; j++) {
             var shift = new Shift(next_angles[j], curr_angles[j]);
@@ -152,19 +151,31 @@ function gen_rings_radii(num_rings) {
 
 function gen_init_angles(num_angles) {
     var thetas = [];
-    for (var i = 0; i <= 2*Math.PI; i += 2*Math.PI/num_angles-0.001) {
+    for (var i = 0; i <= 2*Math.PI; i += 2*Math.PI/num_angles-0.00001) {
         thetas.push(i);
     }
     return thetas;
 }
 
+// Standard Normal variate using Box-Muller transform.
+function gaussianRandom(mean=0, stdev=1) {
+    const u = 1 - Math.random(); // Converting [0,1) to (0,1]
+    const v = Math.random();
+    const z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    // Transform to the desired mean and standard deviation:
+    return z * stdev + mean;
+}
+
 function make_next_angles(curr_angles, momentum_period=15, impulse_period=7) {
     var cycle_ind = loop_counter%momentum_period;
     if (cycle_ind == 0){
-        final_shift_angle = 0.7*(Math.random() - 0.5);
+        // final_shift_angle = gaussianRandom(mean=0, stdev=0.5);
+        final_shift_angle = 2.15*(Math.random() - 0.5);
+        old_shift_angle = shift_angle;
     }
     if (cycle_ind <= impulse_period){
-        shift_angle = cycle_ind * final_shift_angle/impulse_period;
+        diff = (final_shift_angle - old_shift_angle);
+        shift_angle = old_shift_angle + (cycle_ind * diff/impulse_period);
     }
     var next_angles = curr_angles.map(num => (num - shift_angle) % (2*Math.PI));
     return next_angles;
@@ -206,7 +217,6 @@ function draw(currentTime) {
                 convertCanvasToWebGLCoordinates(line[1], rings.center)
         ]);
         vertices = vertices.map(line => [line[0].x, line[0].y, line[1].x, line[1].y]).flat();
-
 
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
         gl.clear(gl.COLOR_BUFFER_BIT);
