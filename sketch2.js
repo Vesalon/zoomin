@@ -52,8 +52,8 @@ function launch() {
 
 
     loop_counter = 0;
-    num_radii = 150;
-    num_angles = 15;
+    num_radii = 200;
+    num_angles = 20;
     shift_angle = 0.1;
     var center = new Point(w/2, h/2);
     var radii = gen_rings_radii(num_radii);
@@ -181,7 +181,7 @@ function convertCanvasToWebGLCoordinates(point, center) {
     return { x: glX, y: glY };
 }
 
-var fps = 25; // Desired frame rate in frames per second
+var fps = 35; // Desired frame rate in frames per second
 var interval = 1000 / fps; // Calculate the interval in milliseconds
 
 var lastDrawTime = 0;
