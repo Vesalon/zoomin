@@ -126,7 +126,7 @@ class Rings {
 
     update() {
         var curr_angles = this.rings[0].map(shift => shift.angle);
-        var next_angles = make_next_angles(curr_angles);
+        var next_angles = make_next_angles(curr_angles, 25);
         var ring = [];
         for (var j = 0; j < curr_angles.length; j++) {
             var shift = new Shift(next_angles[j], curr_angles[j]);
