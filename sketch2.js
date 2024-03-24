@@ -1,13 +1,9 @@
 function launch() {
     canvas = document.getElementById('canvas');
-    // w = canvas.width;
-    // h = canvas.height;
     canvas.width = w = window.innerWidth;
     canvas.height = h = window.innerHeight;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
 
-    gl = canvas.getContext('webgl', { antialias: true, alpha: false });
+    gl = canvas.getContext('webgl');
     if (!gl) {
         console.error('WebGL not supported');
     }
@@ -99,8 +95,6 @@ class Shift {
         var point = this.polar_to_cartesian(radius, this.angle, center);
         var parent = this.polar_to_cartesian(parent_radius, this.parent_angle, center);
         return [point, parent];
-        // ctx.moveTo(point.x, point.y);
-        // ctx.lineTo(parent.x, parent.y);
     }
 
     polar_to_cartesian(r, theta, center) {
@@ -119,7 +113,6 @@ class Rings {
     }
 
     draw() {
-        // ctx.beginPath();
         var lines = [];
         for (var i = 0; i < this.rings.length; i++) {
             var ring = this.rings[i];
@@ -129,13 +122,11 @@ class Rings {
             }
         }
         return lines;
-        // ctx.stroke();
     }
 
     update() {
         var curr_angles = this.rings[0].map(shift => shift.angle);
         var next_angles = make_next_angles(curr_angles);
-        // var next_angles = curr_angles.map(num => (num - 0.13) % (2*Math.PI));
         var ring = [];
         for (var j = 0; j < curr_angles.length; j++) {
             var shift = new Shift(next_angles[j], curr_angles[j]);
@@ -175,6 +166,13 @@ function make_next_angles(curr_angles, momentum_period=15) {
     return next_angles;
 }
 
+function make_next_angles2(curr_angles, momentum_period=15) {
+    if (loop_counter%momentum_period == 0){
+        shift_angles = curr_angles.map(_ => Math.random() - 0.5)
+    }
+    var next_angles = curr_angles.map((num, i) => (num - shift_angles[i]) % (2*Math.PI));
+    return next_angles;
+}
 
 function convertCanvasToWebGLCoordinates(point, center) {
     // Calculate the normalized device coordinates for WebGL
@@ -190,34 +188,8 @@ var lastDrawTime = 0;
 
 
 
-function resizeCanvasToDisplaySize(canvas) {
-    // Lookup the size the browser is displaying the canvas in CSS pixels.
-    const dpr = window.devicePixelRatio;
-    const {width, height} = canvas.getBoundingClientRect();
-    const displayWidth  = Math.round(width * dpr);
-    const displayHeight = Math.round(height * dpr);
-  
-    // const displayWidth  = canvas.clientWidth;
-    // const displayHeight = canvas.clientHeight;
-   
-    // Check if the canvas is not the same size.
-    const needResize = canvas.width  !== displayWidth ||
-                       canvas.height !== displayHeight;
-   
-    if (needResize) {
-      // Make the canvas the same size
-      canvas.width  = displayWidth;
-      canvas.height = displayHeight;
-    }
-   
-    return needResize;
-  }
-  
-
 function draw(currentTime) {
     if (currentTime - lastDrawTime > interval) {
-        // resizeCanvasToDisplaySize(gl.canvas);
-        // gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         vertices = rings.draw();
         vertices = vertices.map(line => [
