@@ -58,9 +58,9 @@ function launch() {
 
     var center = new Point(w/2, h/2);
 
-    rings = make_rings(center, 20, 1, 0.1);
-    rings2 = make_rings(center, 200, 18, 0.1);
-    // rings2 = make_rings(center, radii);
+    rings = make_rings(center, 70, 3, 0.3);
+    rings2 = make_rings(center, 70, 4, 0.1);
+
     draw();
 }
 
@@ -126,8 +126,8 @@ class Rings {
         radii,
         center,
         max_shift_angle=2.15,
-        momentum=50,
-        impulse=26
+        momentum=40,
+        impulse=15
     ) {
         // shifts are lists of shifts
         this.shifts = shifts;
@@ -237,13 +237,13 @@ function draw(currentTime) {
         ]);
         vertices0 = vertices0.map(line => [line[0].x, line[0].y, line[1].x, line[1].y]).flat();
 
-        // vertices2 = rings2.draw();
-        // vertices2 = vertices2.map(line => [
-        //         convertCanvasToWebGLCoordinates(line[0], rings2.center),
-        //         convertCanvasToWebGLCoordinates(line[1], rings2.center)
-        // ]);
-        // vertices2 = vertices2.map(line => [line[0].x, line[0].y, line[1].x, line[1].y]).flat();
-        vertices2 = [];
+        vertices2 = rings2.draw();
+        vertices2 = vertices2.map(line => [
+                convertCanvasToWebGLCoordinates(line[0], rings2.center),
+                convertCanvasToWebGLCoordinates(line[1], rings2.center)
+        ]);
+        vertices2 = vertices2.map(line => [line[0].x, line[0].y, line[1].x, line[1].y]).flat();
+        // vertices2 = [];
 
         vertices = vertices0.concat(vertices2)
 
